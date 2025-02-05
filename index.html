@@ -67,10 +67,13 @@
                     <!-- Portfolio Item 1-->
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
+                            <h2 class="overlay-text">LAB 1</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i>
+                                <p>Lab 1</p></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
+                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..."  />
+                            
                         </div>
                     </div>
                     <!-- Portfolio Item 2-->
@@ -134,10 +137,12 @@
                 </div>
                 <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-lg-4 ms-auto"><p class="lead">Hello! I am Heisen, currently a senior at Cornell University, majoring in Mechanical Engineering.</p></div>
-                    <div class="col-lg-4 me-auto"><p class="lead">
-                        Also minoring in Business and Information Science.</p></div>
-                        <div class="col-lg-4 me-auto"><p class="lead">I am interested in product design, robotics, and bringing automation into the consumer market. Passionate about building solutions into everyday experiences through customer discovery research, user-experience & feature design. I develop automated systems with my mechanical engineering background, and experiences in simple electrical systems and basic machine learning algorithms.</p></div>
+                    <div class="col-lg-6 mx-auto "><p class="lead">Hello! I am Heisen, currently a senior at Cornell University, majoring in Mechanical Engineering.
+                        <br><br>
+                        Also minoring in Business and Information Science.
+                        <br><br>
+                        I am interested in product design, robotics, and bringing automation into the consumer market. Passionate about building solutions into everyday experiences through customer discovery research, user-experience & feature design. I develop automated systems with my mechanical engineering background, and experiences in simple electrical systems and basic machine learning algorithms.
+                    </p></div>
                 </div>
                 
                 <!-- About Section Button 
@@ -277,7 +282,110 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Coming soon! Thanks for your patience!</p>
+                                    
+                                    <h2>The Artemis board and Bluetooth</h2>
+                                    <br><br>
+
+                                    <h3>Part 1A</h3>
+                                    <p>Lab 1A aims to setup and help us familiarize the Arduino IDE, Artemis board, and its libraries. </p>
+                                    <br><br>
+
+                                    <h4 class="text-start">Blink</h4>
+                                    <p class="text-start">For the first part of the lab, we blinked the onboard LED of the Artemis board using example code "Blink".</p>
+                
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/I72h-K6zuxM?mute=1" title="MAE4190 LAB1A: Blink" allowfullscreen></iframe>
+                                    </div>
+                                    <br><br>
+
+                                    <h4 class="text-start">Serial</h4>
+                                    <p class="text-start">Next, we tested out the Serial function on the Artemis board using the example file from Apollo3->Example4_Serial.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/Serial_ss.png" alt="Serial Example" />
+            
+                                    <h4 class="text-start">Temperature Sensor</h4>
+                                    <p class="text-start">We employed the onboard temperature sensor of the Artemis board using example code Apollo3 -> Example2_analogRead.</p>
+                
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/23IqTbFIeRw?mute=1" title="MAE4190 LAB1A: Thermo Sensor" allowfullscreen></iframe>
+                                    </div>
+                                    <br><br>
+
+                                    <h4 class="text-start">Microphone</h4>
+                                    <p class="text-start">We also used the onboard micropone with example file PDM -> Example1_MicrophoneOutput.</p>
+                
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/luxoZTiHryQ?mute=1" title="MAE4190 LAB1A: Thermo Sensor" allowfullscreen></iframe>
+                                    </div>
+                                    <br><br>
+
+                                    <h3>Part 1B</h3>
+    
+                                    <p>Lab 1B establishes the Bluetooth communiation between my computer and the Artemis board. Basic functions are implemented onto the Artemis through Arduino and on Jupyter Notebook to demonstrate and familiarize with the communication protocols. </p>
+                                    <br><br>
+
+                                    <h4 class="text-start">Setting up the Virtual Environment (.venv)</h4>
+                                    <p class="text-start">Setting up the virtual environment involves: 
+                                        <br> 1. Confirming Python requirements on my computer (Python >=3.10, pip >=21.0)
+                                        <br> 2. Installing the virtual environment package and creating a virtual environment
+                                        <br> 3. Activating the virtual environment
+                                        <br> 4. Installing the required packages into the virtual environment folder (described by codebase below)
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/8e4fd6763523ccef43e15efd26bf5eb2.js"></script>
+
+                                    <h4 class="text-start">Setting up Bluetooth configurations</h4>
+                                    <p class="text-start">Setting up the virtual environment involves: 
+                                        <br> 1. Replacing the MAC address in the code with the MAC address of the Artemis board
+                                        <br> 2. Generating a new unique uuid, then update in ble_arduino.ino and connection.yaml
+                                    </p>
+
+                                    <h4 class="text-start">Task ECHO</h4>
+                                    <p class="text-start">Task ECHO is a simple task that sends a message from the Artemis board to the computer, and the computer sends the message back to the Artemis board. The Artemis board then prints the message received from the computer.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/ECHO_ss.png" alt="Serial Example" />
+                                    <br>
+
+                                    <h4 class="text-start">Task SEND_THREE_FLOATS</h4>
+                                    <p class="text-start">Sends a string command to Artemis and extracts three float values. </p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/3floats_a.png" alt="3floats_a" />
+                                    <p class="text-start">Artemis parses the string and prints onto Serial Monitor.</p> 
+                                    <img class="img-fluid mb-5" src="assets/lab1/3floats_b.png" alt="3floats_b" />
+            
+                                    
+                                    <h4 class="text-start">Task GET_TIME_MILLIS</h4>
+                                    <p class="text-start">Implemented command GET_TIME_MILLIS such that Artemis replies with the time in its internal clock (in milliseconds).</p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/get_time.png" alt="GET_TIME_MILLIS" />
+
+                                    <h4 class="text-start">NOTIFICATION HANDLER</h4>
+                                    <p class="text-start">The NOTIFICATION HANDLER is capable of receiving a string value and parse necessary information. It ultimately is capable of extracting timestamps, or timestamps AND temperature depending on the string received.</p>
+                                    <p class="text-start">Coupled with "ble.start_notify" function, it is able to "wait" for information from the Artemis without explicitly knowing when it will come. </p>
+                                    <script src="https://gist.github.com/heisen-kong/fe3c41998686ababcf9bd90d8adcf6bc.js"></script>
+                                    <br>
+
+                                    <h4 class="text-start">Effective Data Transfer Rate</h4>
+                                    <p class="text-start">We determine the effective data transfer rate by requesting for time from the Artemis 100 times. We take the difference in time of 1st transmission and time of last transmission, divided by 100, to determine the transfer rate. While the message is received in string format, the information is effectively of int-type. Hence, we calculate byte transfer rate by multiplying the transfer rate (Hz) by 2 bytes/sec. </p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/loop_rx_rate.png" alt="Transfer Rate" />
+                                    <br>
+
+                                    <h4 class="text-start">Task SEND_TIME_DATA</h4>
+                                    <p class="text-start">We then measure the data collection rate within the Artemis by adding timestamps to an array. Then, sending each element of the array afterwards.</p>
+                                    <p class="text-start">The arduino code below demonstrates data collection first, then sending timestamps one-by-one.</p>
+                                    <script src="https://gist.github.com/heisen-kong/3259ec886ae4d545c9a5f2a5744b21a1.js"></script>
+                                    <br>
+                                    <p class="text-start">Doing similar arithmetic as before, we determine the average "data collection rate". Onboard data collection is SIGNIFICANTLY faster than sending a message at every instance. </p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/data_collection_rate.png" alt="Data collection rate" />
+
+                                    <h4 class="text-start">Task GET_TEMP_ARRAY</h4>
+                                    <p class="text-start">Similar Arduino implementation to SEND_TIME_DATA, but temperature readings are now also included within the string message, as follows:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/temp_msg.png" alt="Temp_time messages"/>
+                                    
+                                    <p class="text-start">With the notification handler implemented prior, it is able to parse into temperature and time readings, then appending into their respective arrays.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab1/get_temp.png" alt="Temperature Array"/>
+                                    
+                                    <h3>Discussion</h3>
+                                    <p class="text-start">Instantaneous looped data transfer is effectively at 10-15 Hz, which is much slower compared to onboard data collection of 44500 Hz. Hence, it is most likely more efficient to do onboard calculations and log status into an array if the movement (or stunt) requires very quick calculations. However, if the action is less time-dependent and relies on instantaneous communication and prompting and receiving between the Artemis and computer, instantaneous data transfer will suffice.</p>
+                                    <p class="text-start">As stated prior, the Artemis is able to record ~89000 bytes of data per second while it is able to transfer an int equivalent of 25 bytes per second </p>
+                                    <p class="text-start">The Artemis board has 384kb = 348,000 bytes of RAM. That would be approx. equivalent to 174,000 int variables. Also a constant data collection of 3.91s = 3910 milliseconds.</p>
+
+                                    <br><br>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
