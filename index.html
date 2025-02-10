@@ -67,18 +67,18 @@
                     <!-- Portfolio Item 1-->
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
-                            <h2 class="overlay-text">LAB 1</h2>
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 1</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i>
-                                <p>Lab 1</p></div>
+                                </div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..."  />
-                            
+                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..."  />    
                         </div>
                     </div>
                     <!-- Portfolio Item 2-->
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 2</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
@@ -407,7 +407,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Tasty Cake</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">LAB 2</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -417,7 +417,101 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <h2>IMU</h2>
+                                    <p>This lab connects the IMU to the Artemis, as we get acquainted with the strengths and witnesses of the Accelerometer and Gyroscope.</p>
+                                    <br><br>
+
+                                    <h4 class="text-start">Setting up the IMU</h4>
+                                    <p class="text-start">For the first part of the lab, we connect the IMU to the Artemis through the QWIIC connector.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/IMU_connect.png" alt="Serial Example" />
+                                    <br>
+                                    <h4 class="text-start">AD0_VAL</h4>
+                                    <p class="text-start">The IMU in this breakout board has the AD0 pin conected to VCC, and hence AD0_VAL is set to 1. If the AD0 pin was connected to ground, it would be set to 0.</p>
+                                    <br>
+
+                                    <h2>Accelerometer</h2>
+                                    <p class="text-start">In order to find the pitch and roll angles, we utilize the constant force of gravity. Reflected in the code below. </p>
+                                    <script src="https://gist.github.com/heisen-kong/0fb4b26368164bd34e4dfa44418647dd.js"></script>
+                                    
+                                    <p>ROLL {-90, 0, 90}</p>
+                                    <div class="row">
+                                        <div class="col-md-4 col-12">
+                                            <img class="img-fluid mb-5" src="assets/lab2/ACC-90roll.png" alt="Accelerometer 1" />
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <img class="img-fluid mb-5" src="assets/lab2/ACC0roll.png" alt="Accelerometer 2" />
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <img class="img-fluid mb-5" src="assets/lab2/ACC90roll.png" alt="Accelerometer 3" />
+                                        </div>
+                                    </div>
+                                    
+                                    <p>PITCH {-90, 0, 90}</p>
+                                    <div class="row">
+                                        <div class="col-md-4 col-12">
+                                            <img class="img-fluid mb-5" src="assets/lab2/ACC-90pitch.png" alt="Accelerometer 1" />
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <img class="img-fluid mb-5" src="assets/lab2/ACC0pitch.png" alt="Accelerometer 2" />
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <img class="img-fluid mb-5" src="assets/lab2/ACC90pitch.png" alt="Accelerometer 3" />
+                                        </div>
+                                    </div>
+
+                                    <h4 class="text-start">Accelerometer Accuracy</h4>
+                                    <p class="text-start">When conducting a two-point calibration, the change of 180 degree yields the range from -88.7 to 89.01 degrees.</p>
+                                    <p class="text-start">((89.01-(-88.7))-180)/180 = -0.012. Quite accurate if disregarding noise. </p>
+                                    <br>
+
+                                    <h4 class="text-start">Fourier Spectrum Analysis</h4>
+                                    
+                                    <p class="text-start">Data recorded from the Acclerometer tends to be noisy (shown below). Hence, we perform a Fourier Spectrum Analysis to define the alpha for a Low Pass Filter.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/ACC_data.png" alt="Accelerometer data" />
+
+                                    <p class="text-start">Following the <a href="https://www.alphabold.com/fourier-transform-in-python-vibration-analysis/" target="_blank">guide here</a>, the Fourier Spectrum Analysis is shown below.</p>
+                                    <script src="https://gist.github.com/heisen-kong/f4c5748dba50cee26d5b3747c21821bd.js"></script>
+                                    <img class="img-fluid mb-5" src="assets/lab2/Fourier_analysis.png" alt="Fourier Spectrum Analysis" />
+                                    <br>
+                                    <p class="text-start">The results from the Fourier Analysis suggests that we would like the cutoff frequency to be around 5Hz. Hence we calculate the alpha for the Low Pass Filter with variables 50Hz sampling rate and 5Hz cutoff frequency.</p>
+                                    <script src="https://gist.github.com/heisen-kong/1b2e261b4701e3bee886770df0f6fe1c.js"></script>
+                                    <p class="text-start">The alpha is calculated to be 0.385, and the Low Pass Filter is implemented as shown below.</p>
+                                    <script src="https://gist.github.com/heisen-kong/da7374bc21fa5b6ac7f9f96bef9362ee.js"></script>
+                                    <p class="text-start">The results of the Low Pass Filter is shown below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/LPF.png" alt="Low Pass Filter" />
+                                    <p class="text-start">The Low Pass Filter is able to reduce the noise while folowing the overall readings from the Accelerometer. </p>
+                                    <br><br>
+
+                                    <h2>Gyroscope</h2>
+                                    <p class="text-start">The Gyroscope is able to measure the angular velocity of the Artemis board. The code below integrates the angular velocity over time to find angular position.</p>
+                                    <script src="https://gist.github.com/heisen-kong/320b0688cbd9a248b6a7507bcbd12e04.js"></script>
+                                    <p class="text-start">Comparing the angular positions calculated from the Gyroscope vs the Accelerometer, the Gyro has less noise, but will experience drift. The gyro is also capable to calculate Yaw angle, where the Accelerometer is not. </p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/Gyro_vs_ACC.png" alt="Gyro vs Acc" />
+                                    <p class="text-start">Image below demonstrates drift of the Gyroscope within 4 seconds of data collection.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/GYRO_drift.png" alt="Gyro Drift" />
+
+                                    <h4 class="text-start">Complementary Filter</h4>
+                                    <p class="text-start">The Complementary Filter is implemented to fuse both Accelerometer and Gyroscope readings. The alpha-value is adjusted to reduce drift from the gyro, but also reduce outlying noise readings from the Accelerometer. </p>
+                                    <script src="https://gist.github.com/heisen-kong/1c7965ab3a6a7a4fe19dc12f38efeb83.js"></script>
+                                    <p class="text-start">Results are shown below, comparing RAW data from ACC and GYRO, the LPF-filtered data from the Accelerometer, and the Complementary Filter data:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/COMP_comp.png" alt="Complementary Filter" />
+                                    <br><br>
+
+                                    <h2>Sampling Data</h2>
+                                    <p class="text-start">After removing any and all delays and Serial.print statements from the data-collection loop within the Artemis, we measure the rate of data collection.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/dataspeed.png" alt="Sampling Rate" />
+                                    <p class="text-start">The Artemis is able to collect data at a rate of 370 Hz. Compared to the loop rate of 44500Hz found from Lab 1, it is significantly slower to measure data from the IMU. However, it is still faster to collect data onboard the Artemis then send through Bluetooth instead of sending a message at every single data collection (~10Hz).</p>
+
+                                    <h4 class="text-start">Stored IMU data</h4>
+                                    <p class="text-start">The visualized data was stored in arrays onboard the Artemis, then sent to the computer for further processing. With 1903 datapoints, the Artemis is capable of storing 6.1 secs of continuous undelayed data.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab2/>5secs.png" alt="Data for 5 secs" />
+                                    <img class="img-fluid mb-5" src="assets/lab2/5sec_datapoints.png" alt="Data for 5 secs" />
+                                    <br><br>
+
+                                    <h2>(NOT)Apple Carplay!</h2>
+                                    <p>Here are some stunts with the RC car!</p>
+
+                                    <br><br>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
