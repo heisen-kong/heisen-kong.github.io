@@ -88,6 +88,7 @@
                     <!-- Portfolio Item 3-->
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 3</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
@@ -537,7 +538,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Circus Tent</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">LAB 3</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -547,7 +548,94 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/circus.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <h2>Time of Flight Sensors</h2>
+                                    <p>This lab connects the Time of Flight (ToF) sensors to the Artemis, getting acquainted with the speed and accuracy of ToF sensors. Also running 2 ToF sensors concurrently.</p>
+                                    <br><br>
+
+                                    <h3>Prelab</h3>
+                                    <h4 class="text-start">I2C Address</h4>
+                                    <p class="text-start">We connect ToF sensors to the Artemis through QWIIC connectors, communicating through the I2C channel. According to the datasheet, the default I2C address is <strong>0x52</strong>.</p>
+                                    <br>
+                                    <h4 class="text-start">Using 2 ToF sensors</h4>
+                                    <p class="text-start">My approach to using 2 ToF sensors begins with connecting the <strong>xshut</strong> pin of sensor 2 to a GPIO pin (pin 8) on the Artemis. </p>
+                                    <br>
+                                    <p class="text-start">During setup, the Artemis shuts down sensor 2 through the xshut pin and sets an I2C address different from the default sensor address. Now the 2 ToF sensor has distinct addresses where the Artemis may identify and communicate with.</p>
+                                    <br>
+
+                                    <h4 class="text-start">ToF sensor placements</h4>
+                                    <p class="text-start">I will be placing sensors on the front side, and right side of the car. This allows me to gain information of distance to obstacles on 2 distinct sides. </p>
+                                    <p class="text-start">I may miss obstacles if the obstacles are (1). Too far, beyond the range of ToF sensors, (2). Too small, might be missed between the slower sampling frequency of fast moving car, (3). Too low, the obstacle may be below the mounted height of the ToF sensor.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab3/sensor_placement.jpeg" alt="sensor_placement" />
+                                    <br>
+
+                                    <h4 class="text-start">ToF wiring diagram</h4>
+                                    <img class="img-fluid mb-5" src="assets/lab3/TOF_wiring.jpeg" alt="wiring diagram" />
+                                    <br>
+    
+                                    <h3>Lab Tasks</h3>
+                                    <h4 class="text-start">ToF to QWIIC breakout board connection</h4>
+                                    <img class="img-fluid mb-5" src="assets/lab3/TOF_connection.jpeg" alt="wiring connections" />
+                                    <br>
+                                    <h4 class="text-start">ToF I2C address scan</h4>
+                                    <br>
+                                    <img class="img-fluid mb-5" src="assets/lab3/I2C_scan.png" alt="I2C scan" />
+                                    <p class="text-start">The I2C scan shows that a single ToF sensor has a "0x29" address. This does not match up with the "0x52" address from the datasheet. This is because the Artemis scans the "true" 7-bit address. The datasheet shows an 8-bit address where the last bit represents the <strong>read/write</strong> information from the sensor. 0x29 shifted left is 0x52.</p>
+
+                                    <h4 class="text-start">ToF sensor modes</h4>
+                                    <p class="text-start">
+                                        The ToF sensor has 3 modes (Short, Medium, Long). After some testing, I've noticed that the different modes yield rather similar results in terms of distance sensed. However, there is a difference in sensing <strong>precision (low variance)</strong>.
+                                        In Short mode, the sensor picks up a much smaller variance in short distances (&lt;200mm), while in Long mode, the sensor picks up a much smaller variance in long distances (&gt;200mm). However, the sensor reads 0mm for any distance less than 30mm.
+                                        Hence, the mode I choose to use depends on how large and far apart the obstacles I expect it to be. It also depends on at which scenario would I prefer the sensor to be more accurate. 
+                                    </p>
+                                    <p class="text-start">The testing setup is shown below: </p>
+                                    <img class="img-fluid mb-5" src="assets/lab3/ToF_test_setup.jpeg" alt="ToF test setup" />
+                                    <p class="text-start">
+                                        I also made comparisons between the ToF operating in <strong>Bright, Room,</strong> and <strong>Dark</strong> environments. The sensor is able to pick up distances in all 3 environments, but the distances picked up in the <strong>Dark</strong> environment is closer to the real distance than the other lighting environments. 
+                                    </p>
+
+                                    <p class="text-start">Ranging times are tested with Arduino code below:</p>
+                                    <script src="https://gist.github.com/heisen-kong/45fca18a46e31ac876a01b677546e1eb.js"></script>
+                                    
+                                    <p class="text-start">
+                                        In terms of ranging times, <br> <br>The ToF takes on average <strong>3.91ms</strong> to range with "stopRanging()" and "startRanging()" commands.<br>
+                                        The ToF takes an average of <strong>2.37ms</strong> to range when ranging without stopping (using the "stopRanging()" command), <br>
+                                        The ToF takes an average of <strong>2.24ms</strong> to range Without checking for data availability.
+                                    </p>
+                                    
+                                    <p class="text-start">The full data visualization is shown below: </p>
+                                    <img class="img-fluid mb-5" src="assets/lab3/ToF_range_comparisons.png" alt="ToF comparisons" />
+                                    <br>
+                                    
+                                    <h4 class="text-start">2 ToF sensors</h4>
+                                    <p class="text-start">In order to communicate to both ToF sensors concurrently, I have to set a different address to one of the ToF sensors. One of the ToF sensors has their xshut pins connected to the Artemis pin 8. Say the one with xshut connnected is sensor 2, and one without connection to xshut is sensor 1, I turn off sensor 2 through the xshut pin by setting pin 8 to <strong>low</strong>, then change the I2C address of sensor 1 to an arbitrary "20" with the function <strong>"setI2CAddress()"</strong></p>
+                                    <p class="text-start">The code below demonstrates the setup of 2 ToF sensors:</p>
+                                    <script src="https://gist.github.com/heisen-kong/f89536f4acf5bc8d1e41813dc89471ca.js"></script>
+
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/d9kWbAvAa2M?mute=1" title="MAE4190 LAB3: 2ToFs sensing" allowfullscreen></iframe>
+                                    </div>
+                                    <br>
+                                    
+                                    <h4 class="text-start">ToF sensor Speed</h4>
+                                    <p class="text-start">We tested the speed of the ToF sensor in a short Serial loop, sending distance data only when data is ready with "<strong>checkForDataReady()</strong>" function.<br>Implemented below:</p>
+                                    <script src="https://gist.github.com/heisen-kong/e8d3730000a9365c4b042b2a85052d90.js"></script>
+                                    <p class="text-start">Results shown: </p>
+                                    <img class="img-fluid mb-5" src="assets/lab3/ToF_speed.png" alt="ToF speed" />
+                                    <p class="text-start">the delay was ~100ms on average, which would come out to be around 10Hz of sampling rate. The limiting factor might be due to the Serial printing time as quickly as possible between each loop, slowing down the processing speed of the Artemis. </p>
+                                    <br>
+
+                                    <h4 class="text-start">Sending ToF and IMU array through bluetooth</h4>
+                                    <p class="text-start">Combining all the labs up till now, we are now able to get and store sensor readings from 2 ToF sensors and the IMU into arrays within the Artemis. Then send it through bluetooth to Jupyter Notebook for further analysis. 
+                                        <br> The code below demonstrates the setup:
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/cca738075fc501b5d61d4e81c0a2d3ff.js"></script>
+                                    <br>
+                                    <p class="text-start">The data is then visualized in Python through Matplotlib!</p>
+                                    <img class="img-fluid mb-5" src="assets/lab3/ToF_IMU_data.png" alt="ToF IMU data" />
+                                
+
+                
+                                    <br><br>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
