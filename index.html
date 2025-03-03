@@ -98,6 +98,7 @@
                     <!-- Portfolio Item 4-->
                     <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal4">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 4</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
@@ -657,7 +658,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Controller</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">LAB 4</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -667,7 +668,83 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/game.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <h2>Motors and Open Loop Control</h2>
+                                    <p>This lab connects onboard motors to the motor drivers, to be controlled by the Artemis. The end of the lab demonstrates Open Loop control of the RC car through the Artemis.</p>
+                                    <br><br>
+
+                                    <h3>Prelab</h3>
+                                    <br>
+                                    <h4 class="text-start">Pinout Wiring Diagram</h4>
+                                    <p class="text-start">In addition to the wiring for the ToF sensors, the following diagram wires the 2 motors onboard each to a motor driver to pins on the Artemis board. The Left motor is pinned to <strong>pin 2,3</strong>, and Right motor pinned to <strong>pin 6,7</strong>. These pins are chosen because they are capable of PWM output signals.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab4/motor+tof_pinout.jpeg" alt="motor+tof_pinout" />
+                                    <br><br>
+                                    <h4 class="text-start">Battery distribution</h4>
+                                    <p class="text-start">The Artemis and Motors are powered by 3 different batteries — 650mAh and 850mAh respectively. 
+                                        This is for 2 reasons: <br>
+                                        <strong>(1).</strong> A separate 850mAh battery is preferrable to supply a steady and consistent current to both motors. <br>
+                                        <strong>(2).</strong> Separate batteries decrease chance of current/voltage spikes for both steady signal input and output for the Artemis, and steady power for the motors. <br>
+                                        <strong>(3).</strong> Battery operation capacity. The 850mAh battery is able to supply power to the motors for a longer period of time than the 650mAh battery, making it more convenient for testing and use. <br>
+                                    </p>
+                                    <br>
+
+                                    <h3>Lab Tasks</h3>
+                                    <br>
+                                    <h4 class="text-start">PWM output from motor drivers</h4>
+                                    <p class="text-start">After soldering the motor driver to the Artemis pins, and leave one end of the wire loose for those pinned to VIN,one of the GND, OUT1, and OUT2 on the motor driver, I connect the positive end of the power supply to VIN, negative end of the power supply to GND, the positive probe of the oscilloscope to OUT1, and the ground prove of the oscilloscope to OUT2. <br><br>
+                                        The power supply is set to 5V as the motor driver is rated for a voltage range from 2.7V to 10.8V. <br>
+                                        The oscilloscope is set to "auto set" for convenience. <br><br>
+
+                                        The code below demonstrates the PWM output from the motor driver. The PWM signal is set to increase from 0 to 100% duty cycle within a for loop to showcase control and variation of the motor speed.
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/ad03d1564a76743a928f6da67ee551ae.js"></script>
+                                    <p class="text-start">The following video shows the PWM readings on the oscilloscope:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/z3Ia7KZasss?mute=1" title="MAE4190 LAB4: motor driver PWM" allowfullscreen></iframe>
+                                    </div>
+                                    <br><br>
+                                    <h4 class="text-start">Battery operational motors</h4>
+                                    <p class="text-start">After soldering the remaining open-ended wires into their respective parts (motor and battery), and using the same code incrementing speed as above, the following video, we demonstrate the car operating as expected powered only by batteries: </p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/mMwulrMkuaM" title="MAE4190 LAB4: battery operated, incrementing speed." allowfullscreen></iframe>
+                                    </div>
+                                    <br><br>
+                                    <h4 class="text-start">Components secured on car</h4>
+                                    <img class="img-fluid mb-5" src="assets/lab4/components_on_car.jpeg" alt="components on car" />
+                                    <br>
+                                    <h4 class="text-start">Lower Limit of PWM</h4>
+                                    <p class="text-start">To test and find the lower limit of PWMs, we slowly increase the PWM value from 0 in increments of 5 until it moves (barely) when placed stationary on the ground. The lower limit of PWM is not anything >0 as there exists static friction and the motor itself is rated at a minimum range of 2.7V. The lower PWM limits are different depending on the type of motion:</p>
+                                    <p class="text-start"><strong>Straight line</strong>movements require lower PWM at ~35 value as both motors are moving in the same direction. Shown below:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/JhX4RQQ-JzI?mute=1" title="MAE4190 LAB4: straight line, lower limit PWM" allowfullscreen></iframe>
+                                    </div>
+                                    <br>    
+                                    <p class="text-start"><strong>Turning in place</strong>movements require higher PWM at ~80 value as motors are moving in the opposite direction. Shown below:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/Vyk1XL4-Ghg?mute=1" title="MAE4190 LAB4: turning in place, lower limit PWM" allowfullscreen></iframe>
+                                    </div>
+                                    <br><br>
+                                    <h4 class="text-start">Calibration discussion</h4>
+                                    <p class="text-start">To calibrate the motors, we allow both motors to go forward and observe any drift or deviations the car makes when trying to go in a straight line. If the car drifts left, we add a calibration factor to increase the PWM value of the right motor, vice versa.<br>
+                                    The following code snippet initializes a calibration factor and applies to the left motor in a straight line function. With great fortune, the motors onboard the car are fairly equal and there is currently no need for calibration value yet. </p>
+                                    <script src="https://gist.github.com/heisen-kong/ad5ec95f4e314d610965e568255fba60.js"></script>
+                                    <p class="text-start">The following vidoe demonstrates the car moving at a straight line for ~6 feet:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/N2snNXIBpFI?mute=1" title="MAE4190 LAB4: Open loop demo" allowfullscreen></iframe>
+                                    </div>
+
+                                    <br><br>
+                                    <h4 class="text-start">Open Loop demonstration</h4>
+                                    <p class="text-start">For simplicity and convenience for future coding, I have divided simple motions of the car (straight, left-turn, right-turn) to separate functions. They are then called within the main loop when necessary. A "ran" boolean value is used such that the open loop program could run once when I hit the "RESET" button on the Artemis. <br>
+                                        Code below: 
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/0b6e8a063db8e9899b86a659198e6a93.js"></script>
+                                    <p class="text-start">Video demonstration below:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/sDDj5xMIw3g?mute=1" title="MAE4190 LAB4: Open loop demo" allowfullscreen></iframe>
+                                    </div>
+
+                                    <br><br>
+                            
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
