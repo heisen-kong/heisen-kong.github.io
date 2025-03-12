@@ -108,6 +108,7 @@
                     <!-- Portfolio Item 5-->
                     <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal5">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 5</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
@@ -766,7 +767,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Locked Safe</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 5</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -776,7 +777,91 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/safe.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <h2>Linear PID Control & Linear Interpolation</h2>
+                                    <p>This lab experiments with PID controls on the car to drive towards the wall as fast as possible, and stop 1 ft away from the wall.</p>
+                                    <br><br>
+
+                                    <h3>Prelab</h3>
+                                    <br>
+                                    <h4 class="text-start">Sending and Receiving data through BLE</h4>
+                                    <p class="text-start">In order to send data from the Artemis to my computer for further analysis, I define a range of arrays to store data within the Artemis while PID is running. Storing data within an internal array is much faster than sending bluetooth data and ensures the loop runs as quickly as possible. <br>
+                                    The data is then sent after the PID control loop is completed. As shown below:<br></p>
+                                    <script src="https://gist.github.com/heisen-kong/e63b1339f7687a7c8b0105f8df1e310e.js"></script>
+                                    <br>
+                                    <p class="text-start">As for data receiving, a basic data handler function is defined within the python script. As demonstrated below:</p>
+                                    <script src="https://gist.github.com/heisen-kong/2e108c432aeeaf2885b4db1b86c5b36e.js"></script>
+                                    <br><br>
+                                
+
+                                    <h3>Lab Tasks</h3>
+                                    <br>
+                                    <h4 class="text-start">PID discussion</h4>
+                                    <p class="text-start">A PID controller is separated into 3 parts: <br>
+                                        <strong>(1).</strong> Proportional: The error between the desired distance and the current distance is multiplied by a constant Kp. This is the main driving force of the car towards the wall. <br>
+                                        <strong>(2).</strong> Integral: The sum of all errors is multiplied by a constant Ki. The integral portion usually is used to eliminate steady state error. <br>
+                                        <strong>(3).</strong> Derivative: The rate of change of the error is multiplied by a constant Kd. This usually helps with overshoot and oscillations around the target distance. <br>
+                                        The PID controller is then calculated as the sum of the 3 parts. <br>
+                                    </p>
+                                    <br>
+                                    <h4 class="text-start">Range/Sampling time discussion</h4>
+                                    <p class="text-start">From lab 3, the range time of the ToF sensor is around 100ms, or ~10Hz. The loop rate of the Artemis is much quicker than 10Hz. Hence the ToF sensor is the "bottleneck" of the PID control loop from being more agile and reactive. This issue may be remedied with extrapolation (later this lab), or Kalman filters (in future labs). <br>
+                                    </p>
+                                    <br><br>
+
+                                    <h4 class="text-start">Implementation</h4>
+                                    <p class="text-start">The implementation of the PID controller is entirely on the Artemis. In my implementation, once the function is activated through BLE, it is mainly separated into 3 parts — <br>
+                                        <strong>1. Receive P/I/D constraints</strong>, <br>
+                                        <strong>2. Take sensor readings</strong>, <br>
+                                        <strong>3. Calculate output speed through PID controller</strong><br>
+                                        <br>
+                                        A few "hacks" are employed to boost the performance of the controller. i.e. I only limited the maximum input speed of the car when going forward, and not when going backward. The limit PWM for reversing is 255 (maximum) such that the car is able to stop much quicker. <br><br>
+                                        For code cleanliness, the PID controller is a separate callable function. Implementation is demonstrated below:
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/e5c10dc1dd64166790e29742d2ea4ab1.js"></script>
+                                    <br><br>
+
+                                    <h4 class="text-start">Tuning: Auxiliary functions</h4>
+                                    <p class="text-start">In order to tune the PID controller, I have created auxiliary functions to better analyze data sent from the Artemis after every PID control test. The python function shown below calculates the max velocity of the car running into the wall. I ultimately also calculate ToF sampling rate and PID loop rate for every run. </p>
+                                    <script src="https://gist.github.com/heisen-kong/73c1a65cf043bbff02494e69dbff1ec6.js"></script>
+                                    <img class="img-fluid mb-5" src="assets/lab5/P_speed.png" alt="example output"/>
+                                    
+                                    <h4 class="text-start">Tuning: Just P-controller</h4>
+                                    <p class="text-start">I first started with just the P-controller. It yielded decent results with the <strong>maximum PWM @ 90 (1.79 m/s)</strong> without running into the wall.<br>
+                                    However, it had very noticable oscillations and the car could perform the task much better than 1.79m/s. <br><br>
+                                    The following video demonstrates the car running with just the P-controller:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/-FNix3EY3pE?mute=1" title="MAE4190 LAB5: P-controller" allowfullscreen></iframe>
+                                    </div>
+                                    <p class="text-start">The data visualization is shown below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab5/P_graph.png" alt="P-controller graph"/>
+                                    
+                                    <p class="text-start">The data shows that the car is able to reach a maximum speed of 1.79m/s before running into the wall. The <strong>PID loop rate</strong> is around 104Hz, and the <strong>ToF sensor sampling rate</strong> is around 18Hz. <br></p>
+                                    <img class="img-fluid mb-5" src="assets/lab5/P_speed.png" alt="P-controller speed"/>
+
+
+
+
+                                    <h4 class="text-start">Tuning: PD-controller</h4>
+                                    <p class="text-start">Since the steady state error was not greatly noticeable, but the oscillations were, I moved onto a PD controller to mitigate the oscillations and increase performance (safe maximum speed into the wall). It yielded much stronger results with the <strong>maximum PWM @ 150 (2.27 m/s)</strong> without running into the wall.<br>
+                                    The oscillations were drastically reduced and it looks pretty good! <br><br>
+                                    The following video demonstrates the car running with the PD-controller <strong>P = 0.6, D = 70</strong>:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/yKSpp1zns9Q?mute=1" title="MAE4190 LAB5: PD-controller" allowfullscreen></iframe>
+                                    </div>
+                                    <p class="text-start">The data visualization is shown below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab5/PD_graph.png" alt="PD-controller graph"/>
+                                    
+                                    <p class="text-start">The data shows that the car is able to reach a maximum speed of 2.275m/s before running into the wall, almost double the speed of the P-controller. The <strong>PID loop rate</strong> is around 113Hz, and the <strong>ToF sensor sampling rate</strong> is around 19Hz. <br></p>
+                                    <img class="img-fluid mb-5" src="assets/lab5/PD_speed.png" alt="PD-controller speed"/>
+                                    <br><br>
+
+                                    <h4 class="text-start">Extrapolation</h4>
+                                    <p class="text-start">To increase performance, we require more frequent sampling of the car's distance to the wall. However, the sampling rate for the ToF sensor is capped. For a rudimentary solution, we may extrapolate the position of the car at a given time with the discrete velocity calculated from the previous PID cycle. <br>
+                                    Implementation shown below:<br></p>
+                                    
+                                    <script src="https://gist.github.com/heisen-kong/842815607ad0cbaf1cc122a8c438f8ac.js"></script>
+                                    
+                                    <br><br>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
