@@ -118,6 +118,7 @@
                     <!-- Portfolio Item 6-->
                     <div class="col-md-6 col-lg-4">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 6</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
@@ -883,7 +884,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Submarine</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 6</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -893,7 +894,114 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    
+                                    <h2>Orientation Control by PID Controller</h2>
+                                    <p>This lab controls the yaw (z-axis) angle of the robot using the IMU as a sensor input through a PID controller.<br><br>
+                                    The robot is required to take target angle inputs sent throught BLE, and the PID controller will drive the robot to the target angle, sustaining outside disturbances and interferences. </p>
+                                    </p>
+                                    <br><br>
+
+                                    <h3>Prelab</h3>
+                                    <br>
+                                    <h4 class="text-start">Sending and Receiving data through BLE</h4>
+                                    <p class="text-start">In order to send data from the Artemis to my computer for further analysis, I define a range of arrays to store data within the Artemis while PID is running. Storing data within an internal array is much faster than sending bluetooth data and ensures the loop runs as quickly as possible. <br><br>
+                                    The case function <strong>send_data</strong> within the Artemis code is defined to send data to python code for analysis. </p>
+                                    <script src="https://gist.github.com/heisen-kong/49b4c275729011aaf53d55263795e330.js"></script>
+
+                                    <p class="text-start">
+                                    The PID controller is first activated (through the <strong>"start_pid_orient"</strong> command) , and data collection will only begin when command <strong>"start_record"</strong> is sent through BLE. Data collected is then sent through the <strong>"send_data"</strong> command after the PID control loop is completed. <br><br>
+                                    Commands to define new target angle (<strong>"new_target_angle</strong>), stop record (<strong>stop_record</strong>), and stop PID control (<strong>stop_pid_orient</strong>) are also defined. <br><br>
+                                    A notification handler function is defined to handle incoming data from the Artemis.
+                                    <br>As shown below:<br></p>
+                                    <script src="https://gist.github.com/heisen-kong/de34c216f262e10bbbab72d6487a8dde.js"></script>
+                                    <br><br>
+
+                                    
+                                    <h3>Lab Tasks</h3>
+                                    <br>
+                                    <h4 class="text-start">PID discussion</h4>
+                                    <p class="text-start">A PID controller is separated into 3 parts: <br>
+                                        <strong>(1).</strong> Proportional: The error between the desired distance and the current distance is multiplied by a constant Kp. This is the main driving force of the car towards the wall. <br>
+                                        <strong>(2).</strong> Integral: The sum of all errors is multiplied by a constant Ki. The integral portion usually is used to eliminate steady state error. <br>
+                                        <strong>(3).</strong> Derivative: The rate of change of the error is multiplied by a constant Kd. This usually helps with overshoot and oscillations around the target distance. <br>
+                                        The PID controller is then calculated as the sum of the 3 parts. <br>
+                                    </p>
+                                    <br>
+                                    <h4 class="text-start">Range/Sampling time discussion</h4>
+                                    <p class="text-start">From lab 2, the sampling time of an IMU sensor is around ~370Hz, relatively fast and comparable to the Artemis loop. I also used the DMP (Digital Motion Processing) function in the IMU to find the yaw angle, which might actually sample faster than the Artemis main loop rate. However, the DMP has the ability to set sampling frequency as remedy(to be discussed later).<br>
+                                    </p>
+                                    <br><br>
+
+                                    <h4 class="text-start">Implementation</h4>
+                                    <p class="text-start">The implementation of the PID controller is entirely on the Artemis. In my implementation, once the function is activated through BLE, it is mainly separated into 3 parts — <br>
+                                        <strong>1. Receive P/I/D constraints</strong>, <br>
+                                        <strong>2. Take sensor readings</strong>, <br>
+                                        <strong>3. Calculate output speed through PID controller</strong><br>
+                                        <br>
+                                        For code cleanliness, the PID controller is a separate callable function. Implementation is demonstrated below:
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/8f0a2bfbf77d7a0a4cb976bf4b631d31.js"></script>
+                                    <br>
+
+                                    <h4 class="text-start">DMP Implementation</h4>
+                                    <p class="text-start">As possibly noticed within the PID_controller and previously mentioned, I used the the DMP (Digital motion processing) function within the IMU to find the current yaw angle of the car.<br><br>
+                                    We first have to modify the <strong>SparkFun ICM-20948 library</strong> in Arduino, specifically, uncommenting line 29 in the ICM_20948_C.h file to define the constant ICM_20948_USE_DMP.</p>
+                                    <img class="img-fluid mb-5" src="assets/lab6/define_DMP.png" alt="define DMP"/>
+                                    
+                                    <p class="text-start">In addition to exisitng IMU sensor setup (from LAB2), the following code demonstrates additional setup necessary to initalize the DMP function. <br>
+                                    When calling DMP to find yaw angle within the PID controller function, we receive <strong>q1,q2,q3</strong> quaternion angles, and we call the defined <strong>quaternion_to_yaw(q1,q2,q3)</strong> function to convert to yaw angle and further used for PID controls.<br><br>
+                                    The code is shown below:</p>
+                                    <script src="https://gist.github.com/heisen-kong/d1086ceda770a9e636c7905b288d88b3.js"></script> <br>
+                                    <p class="text-start"><strong>NOTE:</strong> line 11 within the code gist "myICM.setDMPODRrate(DMP_ODR_Reg_Quat6, 4)" sets the DMP output data rate. <br>
+                                    The second argument value is calculcated by equation: <strong>value = (DMP running rate / ODR ) - 1 </strong><br>
+                                    <strong>e.g. with DMP running at 55Hz, value = 4 yields output data rate of 11Hz. </strong><br>
+                                    This is helpful to set the DMP output rate slower than the Artemis loop rate such that the DMP queue does not overflow as it operates in a FIFO queue. However, an overly slow DMP output rate yields a less sensitive PID controller. </p>
+                                    </p>
+                                    <br>
+
+                                    <h4 class="text-start">Continuous BLE input/output while running PID contoller/data collection</h4>
+
+                                    <p class="text-start">My solution to enable the car to continuously receive BLE inputs and outputs is to utilize flags indicating status of the car (i.e. <strong>pid_orient_on, pid_orient_recording</strong>)<br>
+                                    The BLE commands then only alters the flags and other value initializations. <br>
+                                    The main loop is then able to continuously loop through the <strong>write_data, read_data</strong> functions to handle BLE commands at every loop within the Artemis. If the flags yield true, we enter the if-statements to call the PID controller and data recording functions etc.<br>
+                                    The code is shown below:</p>
+                                    
+                                    <script src="https://gist.github.com/heisen-kong/6572f57038569345aed4faafeb905728.js"></script>
+                                    <br><br>
+
+                                    <h4 class="text-start">Tuning: Auxiliary functions</h4>
+                                    <p class="text-start">In order to tune the PID controller, I have created auxiliary functions to better analyze data sent from the Artemis after every PID control test. In addition to graphing <strong>target angle/current angle vs Time</strong>, and <strong>P,I,D, and PID speed values vs Time</strong>, I also measure the average DMP output and Artemis loop Rate to optimize performance.</p>
+                                    <script src="https://gist.github.com/heisen-kong/40b55ce7a53aa789a1b532ae3d38e522.js"></script>
+                                    <img class="img-fluid mb-5" src="assets/lab6/PI_rates.png" alt="example rates"/>
+                                    
+                                    <h4 class="text-start">Tuning: Just P-controller</h4>
+                                    <p class="text-start">I first started with just the P-controller. It yielded decent results with <strong>P = 5; maximum PWM @200</strong>. However, there exists a substantial amount of steady state error due to the high deadband value (~90 PWM) of in place turning for our setup of motors and car.<br>
+                                    Results in the video below:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/2uqBiSQ4_uM?mute=1" title="MAE4190 LAB6: P-controller" allowfullscreen></iframe>
+                                    </div>
+                                    <br>
+                                    <p class="text-start">Graph & rate below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab6/P_graphs.png" alt="P-controller graph"/>
+                                    <img class="img-fluid mb-5" src="assets/lab6/P_rates.png" alt="P-controller sampling rates"/>
+
+                                    <h4 class="text-start">Tuning: PI-controller</h4>
+                                    <p class="text-start">To remedy the steady state error, I add the Integral term to the controller. It yielded much better results that ultimately returns the car back to its target angle with <strong>P = 5, I = 0.007; maximum PWM @200</strong>.<br>
+                                    Results in the video below:</p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/LWVReacdB6A?mute=1" title="MAE4190 LAB6: PI-controller" allowfullscreen></iframe>
+                                    </div>
+                                    <br>
+                                    <p class="text-start">Graph & rate below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab6/PI_graphs.png" alt="PI-controller graph"/>
+                                    <img class="img-fluid mb-5" src="assets/lab6/PI_rates.png" alt="PI-controller sampling rates"/>
+
+                                    <h4 class="text-start">Concluding discussion</h4>
+                                    <p class="text-start">The controller that works best within this setup and objective of keeping a constant target orientation angle is with a PI controller. This is due to the addition of the Integral term that accumulates the error and is ultimately able to overcome the deadband value of this setup and correct itself to precisely the target angle.<br><br>
+                                    It is likely that the performance improves if we align the DMP cycle rate closer to the PID loop rate, such that the controller is more sensitive with more up-to-date input yaw angle data. However, DMP cycle rate at ~11Hz works fine for this setup and objective. Hence, I have opted to be conservative in its DMP output rate to ensure that the FIFO queue does not overflow and render the controller useless.</p>
+
+
+
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
