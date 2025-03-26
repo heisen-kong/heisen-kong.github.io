@@ -116,9 +116,29 @@
                         </div>
                     </div>
                     <!-- Portfolio Item 6-->
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
                             <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 6</h2>
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 7-->
+                    <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal7">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 7</h2>
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 8-->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal8">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 8</h2>
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
@@ -1000,6 +1020,105 @@
                                     <p class="text-start">The controller that works best within this setup and objective of keeping a constant target orientation angle is with a PI controller. This is due to the addition of the Integral term that accumulates the error and is ultimately able to overcome the deadband value of this setup and correct itself to precisely the target angle.<br><br>
                                     It is likely that the performance improves if we align the DMP cycle rate closer to the PID loop rate, such that the controller is more sensitive with more up-to-date input yaw angle data. However, DMP cycle rate at ~11Hz works fine for this setup and objective. Hence, I have opted to be conservative in its DMP output rate to ensure that the FIFO queue does not overflow and render the controller useless.</p>
 
+
+
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Modal 7-->
+        <div class="portfolio-modal modal fade" id="portfolioModal7" tabindex="-1" aria-labelledby="portfolioModal7" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body text-center pb-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 7</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
+                                    <!-- Portfolio Modal - Text-->
+                                    
+                                    <h2>Kalman Filters</h2>
+                                    <p>This lab is a continuation of linear PID control from Lab 5. The goal is to execute the behaviour from lab 5 faster. <br>
+                                    Kalman Filters are capable of estimating the state of the robot (distance from the wall) in between readings from the Time-of-Flight sensor. </p>
+                                    </p>
+                                    <br><br>
+
+                            
+                                    
+                                    <h3>Lab Tasks</h3>
+                                    <br>
+                                    <h4 class="text-start">Estimating Drag & Momentum</h4>
+                                    <p class="text-start">We first estimate the drag and momentum of the car by running the car at a selected PWM (120) and collecting the time, distance from wall, and input PWM data from the Artemis. <br>
+                                    The following functions are used to calculate the instantaneous velocities of the car to find its top speed, 90% speed, and 90% rise time.
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/069117ba354167d03aa6c1132b5ace3c.js"></script>
+                                    <p class="text-start">After truncating and plotting the data, we find the 90% rise period as <strong>728ms</strong> with steady state speed at <strong>1112 mm/s</strong>, as shown below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab7/90%_rise.png" alt="90% rise time"/>
+                                    <br>
+                                    <p class="text-start">The drag and momentum of the car are then calculated as <strong>d=0.0008993</strong> and <strong>0.0002843</strong> respectively using the arithmetic below:<br></p>
+                                    <script src="https://gist.github.com/heisen-kong/ea26603b7186a89f2ec1263f378957e9.js"></script>
+
+                                    <h4 class="text-start">Initialize Kalman Filter</h4>
+                                    <p class="text-start">The <strong>A and B matrices</strong> are computed with <strong>drag</strong> and <strong>momentum</strong> constants. <br>
+                                        <strong>Delta_T</strong> is chosen to be 0.01s due to the 10Hz cycle rate of the ToF sensor. <br>
+                                        The <strong>C matrix </strong> is chosen to be <strong>[-1,0]</strong> as we are only measuring the distance from the wall.  <br>
+                                        <strong>sigma_1,sigma_2,sigma_3</strong> are process and measure noise that are tuned to optimize the filter. (Spoiler alert: sigma_1 and sigma_2 = 50, sigma_3 = 5 yields the closest fit within my robot system) <br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/8e27b4f14eb97aae1c7ba0a9b0891031.js"></script>
+                                    <img class="img-fluid mb-5" src="assets/lab7/Initialize_KF.png" alt="Initialize_KF"/>
+                                    <br><br>
+
+                                    <h4 class="text-start">Implementation in python</h4>
+                                    <p class="text-start">The following snippet demonstrates implementing the Kalman Filter function in Python, which we use to call the filter on the previously collected data to plot the results. <br>
+                                        We do this to compare the Kalman Filter's estimation of the car's distance from the wall to the actual distance from the wall, to tune the parameters process and measure noise parameters.<br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/e101d2f43009999bc3f5898c7e898968.js"></script>
+                                    <br>
+
+                                    <h4 class="text-start">KF Parameter Tuning</h4>
+                                    <p class="text-start">My initial process and measure noise were sig_1,sig_2 = 5, and sig_3 = 20. Setting 20 as the measure noise parameter was recommended from the lecture.<br>
+                                    The plotted results are shown below: </p>
+                                    <img class="img-fluid mb-5" src="assets/lab7/sig_5.png" alt="sig_5"/>
+                                    <br>
+
+                                    <p class="text-start">Tuning up the process noise to sig_1,sig_2 = 40 yielded much better results while maintaining measure noise sig_3 = 20: </p>
+                                    <img class="img-fluid mb-5" src="assets/lab7/sig_40.png" alt="sig_40"/>
+                                    <br>
+
+                                    <p class="text-start">Lastly, just a bit more tuning up the process noise to sig_1,sig_2 = 50 and tweaking  measure noise down to ig_3 = 5 yielded best fit:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab7/sig_50.png" alt="sig_50"/>
+                                    <br>
+                                        
+                                    <h4 class="text-start">Implementing Kalman Filter on Robot</h4>
+                                    <p class="text-start">The first thing to transfer what we did in Python to Arduino code is to initialize the matrices.<br>
+                                    We use the <strong>BasicLinearAlgebra.h</strong> library to work with matrices.</p>
+                                    <br>
+                                    <script src="https://gist.github.com/heisen-kong/91aa72492c48cac8cc79e7e41a46bfc6.js"></script>
+                                    
+                                    <p class="text-start">The function is modelled after implemented KF function in Python, calling the function demonstrated at the bottom:<br></p>
+                                    <script src="https://gist.github.com/heisen-kong/79002ba3b610f8b8d8619b940c80c4b9.js"></script>
+                                    <br>
+
+                                    <p class="text-start">Lastly, the KF function is implemented within the PID loop</p>
+                                    <script src="https://gist.github.com/heisen-kong/aa322a145641c407067fb420d6aa0c48.js"></script>
 
 
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
