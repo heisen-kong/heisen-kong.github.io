@@ -145,6 +145,46 @@
                             <img class="img-fluid" src="assets/img/portfolio/cake.png" alt="..." />
                         </div>
                     </div>
+                    <!-- Portfolio Item 9-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal9">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 9</h2>
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..." />
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 10-->
+                    <div class="col-md-6 col-lg-4 mb-5 ">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal10">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 10</h2>
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/portfolio/game.png" alt="..." />
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 11-->
+                    <div class="col-md-6 col-lg-4 mb-5 ">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal11">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 11</h2>
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 12-->
+                    <div class="col-md-6 col-lg-4 mb-5 ">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal12">
+                            <h2 class="overlay-text text-white" style="font-size: 3em;">LAB 12</h2>
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1207,6 +1247,127 @@
                                     <p class="text-start">The stunt is achieved by running the car forward at full speed, then reversing at full speed. The car is able to flip over and return back to the starting point. <br>
                                     Due to the same start and end point, a hard-coded open loop solution is sufficient to achieve the stunt while being rather robust.<br>
                                     </p>
+
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Modal 9-->
+        <div class="portfolio-modal modal fade" id="portfolioModal9" tabindex="-1" aria-labelledby="portfolioModal9" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body text-center pb-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 9</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
+                                    <!-- Portfolio Modal - Text-->
+                                    
+                                    <h2>Mapping</h2>
+                                    <p>This lab maps out a static room, to be used in later localization and navigation tasks. <br>
+                                        We build the map by placing the robot in set marked locations within the map, spin on its axis while collecting ToF readings. </p>
+                                    <br><br>
+
+                            
+                                    
+                                    <h3>Lab Task</h3>
+                                    <br>
+                                    <h4 class="text-start">Control</h4>
+                                    <p class="text-start">
+                                    We choose to control the robot rotation through <strong>Orientation Control</strong>. <br><br>
+                                    It is implemented by re-purposing the Orientation PID controller from Lab 6. <br>
+                                    We take ToF readings at 14 different angles and we orient the robot to each angle by entering the target angle arguments to the PID controller function through a for-loop. <br>
+                                    The code is shown below:<br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/0d098a2988f9dd29ef22bcfeff0e0692.js"></script>
+                                    <br>
+                                    <p class="text-start">
+                                        The orientation control is showcased in the video below:<br>
+                                    </p>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6 col-12 mb-3">
+                                            <div class="ratio ratio-16x9">
+                                                <iframe src="https://www.youtube.com/embed/c9-zDVCz3Kc?mute=1" title="MAE4190 LAB9: PID_Turn" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 mb-3">
+                                            <img class="img-fluid rounded shadow" src="assets/lab9/PID_turn_graph.png" alt="LAB9:PID_Turn"/>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <p class="text-start">
+                                        The graph shows the target angle and current angle of the robot while turning. <br>
+                                        The PID controller is able to turn the robot to the target angle with a small amount of overshoot (maximum of ~20 degrees, average <10degrees) <br>
+                                       </p>
+                                    
+
+                                    <h4 class="text-start">Read out Distances</h4>
+                                    
+                                    <p class="text-start">
+                                        we execute 2 full rotations at each of the marked positions in the lab space: (-3,-2), (5,3), (0,3), (5,-3), and (0,0). <br>
+                                        On the Arduino side, we add a record_map function to find the actual angle and read distances at each of the 14 sampling angles. The stored data is then sent through bluetooth to the computer for further analysis. 
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/12b9470012bbe4251e36fe30dc0a8f2d.js"></script>
+                                   
+                                    <p class="text-start">
+                                        The data is then plotted in Python to visualize the distances at each angle. <br>
+                                        Example plot shown below:
+                                    </p>
+                                   
+                                    <img class="img-fluid mb-5" src="assets/lab9/ex_plots.png" alt="example plot"/>
+                                   
+                                    <p class="text-start">
+                                        The rotational data seems reliable enough to be used for mapping. Hence we use the actual angles for plotting instead of target angles. <br>
+                                    </p>
+                                    
+
+                                    <h4 class="text-start">Merge Plot</h4>
+
+                                    <p class="text-start">
+                                        After the data is sent to the computer, we store the data of each rotation into a separate csv file in case we need to access it at a later time. <br>
+                                        We then apply a transformation matrix of each data point and offset it rotation coordinate system to global coordinates. <br>
+                                        Transformation matrix is calculated as:[r*cos(theta), r*sin(theta)] where theta is the angle of rotation. <br>
+                                        The following implementation showcases the transformation for the 1st run of the robot at (-3,-2):<br>
+                                    </p>
+
+                                    <script src="https://gist.github.com/heisen-kong/c4575c64294dc99bbf4d764b8d45c2f2.js"></script>
+
+                                    <img class="img-fluid mb-5" src="assets/lab9/one_rotationw:polar.png" alt="one coordinate plot"/> 
+
+                                    <p class="text-start">
+                                        The merged graph of all 10 datasets (2 runs on each coordinate:(-3,-2), (5,3), (0,3), (5,-3), and (0,0)) is shown below:<br>
+                                    </p>
+                                    <img class="img-fluid mb-5" src="assets/lab9/merged_graph.png" alt="merged plot"/>
+                                   
+
+
+                                    <h4 class="text-start">Convert to Line-Based Map</h4>
+                                    <p class="text-start">
+                                        We convert the lines into 2 list of start and end points of the lines. <br>
+                                        Start_list = [[-1.5, -1.5, -1.0, -0.6, -0.6, 1.9, 1.9, -0.3, -0.3, -0.6, -0.6], <br>
+                                                        [-1.3, 0.1, 0.1, 0.1, 1.3, 1.3, -1.3, -1.3, -0.6, -0.6, -1.3]]  <br>
+
+                                        End_list = [[-1.5, -1.0, -0.6, -0.6, 1.9, 1.9, -0.3, -0.3, -0.6, -0.6, -1.5],   <br>
+                                                    [0.1, 0.1, 0.1, 1.3, 1.3, -1.3, -1.3, -0.6, -0.6, -1.3, -1.3]]      <br>
+                                                </p>
 
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
