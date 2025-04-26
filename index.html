@@ -1380,6 +1380,119 @@
                 </div>
             </div>
         </div>
+
+        <!-- Portfolio Modal 10-->
+        <div class="portfolio-modal modal fade" id="portfolioModal10" tabindex="-1" aria-labelledby="portfolioModal10" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body text-center pb-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 10</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
+                                    <!-- Portfolio Modal - Text-->
+                                    
+                                    <h2>Grid Localization using Bayes Filter</h2>
+                                    <p>
+                                        This lab implements a grid localization algorithm using Bayes Filter, deployed virtually on Python environment. <br>
+                                    </p>
+                                    <br><br>
+
+                            
+                                    
+                                    <h3>Lab Task</h3>
+                                    <br>
+                                    <p class="text-start">The implementation is broken down into 5 functions: <strong>compute_control, odom_motion_model, prediction_step, sensor_model, and update_step</strong>.</p>
+                                    <br>
+                                    <h4 class="text-start">Compute Control</h4>
+                                    <p class="text-start">
+                                    This function computes the control input of the robot by taking in odometry poses (the previous and current position of the robot). <br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/9ceedf03287f84a20d71c8d9a3dca594.js"></script>
+                                    <br>
+                                    <p>Outputs <strong>delta_rot_1, delta_rot_2, delta_trans</strong> are calculated by geometries shown below:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab10/Odometry_model.png" alt="Odometry_model"/>
+                                    <h4 class="text-start">Odometry Motion Model</h4>
+                                    <p class="text-start">
+                                        The Odometry Motion Model function is used to calculate the probability of the robot's current pose given the control input and previous pose. <br>
+                                        The probablity is calculated using the Gaussian distribution, which is a common assumption for the motion model. <br>
+                                        The total probability is calculated by multiplying the probabilities of each individual motion model, as shown below:<br>
+                                    </p>
+                                    <img class="img-fluid mb-5" src="assets/lab10/gaussian.png" alt="gaussian probs"/>
+                                    <br>
+                                    <script src="https://gist.github.com/heisen-kong/9bced2894cfcf0be2eeeee9911e40494.js"></script>
+                                    <br><br>
+
+                                    <h4 class="text-start">Prediction Step</h4>
+                                    <p class="text-start">
+                                        At each of the possible states, we calculate the probability of the robot's current pose given the control input and previous pose by calling the odom_motion_model previously defined. <br>
+                                        While looping through the grid, we ignore the cells that are "impossible" to be the robot's current pose (p<0.0001). <br>
+                                        Since we ignored impossible cells, we normalize the probability of each cell to ensure that the sum of all probabilities is equal to 1. <br>
+                                        Code that implements the <strong>prediction-step</strong> is shown below:<br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/a55df5f388429db1c441dd75bb18ccc7.js"></script>
+                                    
+                                    <h4 class="text-start>">Sensor Model</h4>
+                                    <p class="text-start">
+                                        The sensor model is used to calculate the probability of the sensor measurements under a gaussian distribution. <br>
+                                        We use the snesor reading as the mean of the Gaussian distribution, and the standard deviation is defined in <strong>loc.sensor_sigma</strong>. <br>
+                                        Implementation of the sensor model is shown below:
+                                    </p>
+                                    <br>
+                                    <script src="https://gist.github.com/heisen-kong/703ff40cde672c2aa7e1288a56b1efe2.js"></script>
+
+                                    <h4 class="text-start">Update Step</h4>
+                                    <p class="text-start">
+                                        The update step is used to update the probability of each cell in the grid given the sensor measurements. <br>
+                                        The probability is calculated by multiplying the probability of the sensor model and the probability of the prediction step. <br>
+                                        The code that implements the update step is shown below:
+                                    </p>
+                                    <br>
+                                    <script src="https://gist.github.com/heisen-kong/9f0bf10b2228fa70f2d2fcd10cb18966.js"></script>
+                                    <br><br>
+
+                                    <h4 class="text-start">Final Implementation</h4>
+                                    <p class="text-start">The following image shows simply executing trajectory and estimating robot pose using simply odometry (red), comparing to ground truth (green).<br>
+                                    It is clear to see that the performance is not very accurate. </p>
+                                    <img class="img-fluid mb-5" src="assets/lab10/execute_trajectory.png" alt="execute_trajectory"/>             
+                                    <br>
+
+                                    <p class="text-start">The following image shows the robot's estimated pose using the Bayes Filter (blue) compared to the ground truth (green), with the simple odometry estimation (red) for comparison. <br>
+                                    </p>
+                                    <img class="img-fluid mb-5" src="assets/lab10/bayes_filter.png" alt="bayes_filter"/>
+                                    <br>
+                            
+                                    <p class="text-start">The following video demonstrates the simulation in action with prediction and updates of the Bayes Filter. </p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/FU17dc90ZOQ?mute=1" title="MAE4190 LAB10" allowfullscreen></iframe>
+                                    </div>
+
+                                    <p class="text-start">Results of prediction and update statistics shown below: <br>    
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/70d05ab95a740b04ebb292ee87d13e14.js"></script>
+                                    <br><br>
+                                    
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
