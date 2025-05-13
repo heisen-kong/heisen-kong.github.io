@@ -1576,6 +1576,88 @@
                 </div>
             </div>
         </div>
+
+        <!-- Portfolio Modal 12-->
+        <div class="portfolio-modal modal fade" id="portfolioModal12" tabindex="-1" aria-labelledby="portfolioModal12" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body text-center pb-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 12</h2>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
+                                    <!-- Portfolio Modal - Text-->
+                                    
+                                    <h2>Grid Localization on a Real Robot</h2>
+                                    <p>
+                                        This lab implements a localization with Bayes Filter deployed on an actual robot. We only update step using full 360 degree scans with the ToF sensor and does not take into account odometry due to the high noise of IMU readings. <br>
+                                    </p>
+                                    <br><br>
+
+                            
+                                    
+                                    <h3>Lab Task</h3>
+                                    <br>
+                                    <p class="text-start">The implementation is first done in the Arduino code as a <strong>localization</strong> case, called to perform a full 360-degree rotation taking ToF sensor readings and sending it back to Python code for further analysis. <br>
+                                    We then implement <strong>perform_observation_loop</strong> function in Python to perform the localization task. <br>
+                                    </p>
+                                    <br>
+                                    <h4 class="text-start">Localization (360 rotation) on Arduino</h4>
+                                    <p class="text-start">
+                                    This function is called to perform a full 360-degree rotation, taking ToF sensor readings in 20 degree increments for 18 total readings. <br>
+                                    Implementation of the function is shown below:<br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/14e67bd4f7837f7d9aed3a765119d24f.js"></script>
+                                    <br><br>
+
+                                    <h4 class="text-start">perform_observation_loop in Python</h4>
+                                    <p class="text-start">
+                                        The perform_observation_loop function calls the localization function on the Arduino, waits for the data to be sent back and rescales the data to be used for localization. <br>
+                                        Implementation of function is shown below:<br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/1753f97ef25d72a33eebc0270701aee4.js"></script>
+                                    <br><br>
+
+                                    <h4 class="text-start">Challenges</h4>
+                                    <p class="text-start">
+                                    While I believe the implementation is correct, I was unable to get the robot to perform the localization task. <br>
+                                    This was due to a discrepancy between the set of data that is taken on the Arduino and the data that was sent and received on the Python code. <br>
+                                    As shown below, the data collected in Arduino exists in relatviely robust 20 degree angle increments (in the <strong>CA</strong> current angle column) with its corresponding distance readings. <br>
+                                    However, the data received on Python skips data at certain angles at first, then proceed to maintain the same exact readings for the following data points. <br>
+                                    This makes it impossible to perform the localization task as the data is not reliable. <br>
+                                    </p>
+                                    <p class="text-start">Readings taken from Arduino Serial screen, to be sent to Python code:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab11/arduino_readings.png" alt="arduino"/>
+                                    <p class="text-start">Readings received from Arduino, shown on Python:</p>
+                                    <img class="img-fluid mb-5" src="assets/lab11/python_readings.png" alt="python"/>
+                                    
+                                    <p class="text-start">
+                                        I tried multiple methods to fix this issue, including sending data in varying size, implementing varying delay times etc. However, none of it seemed to fix the problem.<br>
+                                        Very unfortunate that I was unable to fix this issue and get the localization task to work. Perhaps I may be able to figure a workaround if given more time.<br>
+                                        I will be sure to update this section if I am able to fix the issue in the future. <br>
+                                    </p>
+                                    <br><br>
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
