@@ -1598,55 +1598,48 @@
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     
-                                    <h2>Grid Localization on a Real Robot</h2>
+                                    <h2>Path Planning and Execution</h2>
                                     <p>
-                                        This lab implements a localization with Bayes Filter deployed on an actual robot. We only update step using full 360 degree scans with the ToF sensor and does not take into account odometry due to the high noise of IMU readings. <br>
+                                        This lab programs the robot through a set of waypoints in a set environment, with the goal of going as quickly and as accurately as possible. <br>
                                     </p>
                                     <br><br>
 
                             
                                     
-                                    <h3>Lab Task</h3>
+                                    <h3>Planning discussion</h3>
                                     <br>
-                                    <p class="text-start">The implementation is first done in the Arduino code as a <strong>localization</strong> case, called to perform a full 360-degree rotation taking ToF sensor readings and sending it back to Python code for further analysis. <br>
-                                    We then implement <strong>perform_observation_loop</strong> function in Python to perform the localization task. <br>
-                                    </p>
-                                    <br>
-                                    <h4 class="text-start">Localization (360 rotation) on Arduino</h4>
                                     <p class="text-start">
-                                    This function is called to perform a full 360-degree rotation, taking ToF sensor readings in 20 degree increments for 18 total readings. <br>
-                                    Implementation of the function is shown below:<br>
+                                        The set of waypoints are defined and hence the path is also pre-defined. Over the course of the semester, we have implemented multiple functions to control the robot's movement, ranging from Distance and Orientation PID controls to mapping localization.<br>
+                                        Given the time constraints and materials available to us, it is best to use the <strong>PID Orientation Control</strong> function to control the robot's movement over localization as it is more reliable and robust.  <br>
+                                    <br>
+                                        The graph and drawing below shows the set of waypoints and the planned orientations that we plan on executing at each waypoint. The distance to travel between each waypoint is tuned through trial and error as that is believed to be the most straightforward solution. <br>
                                     </p>
-                                    <script src="https://gist.github.com/heisen-kong/14e67bd4f7837f7d9aed3a765119d24f.js"></script>
+                                    <img class="img-fluid mb-5" src="assets/lab12/planning.jpeg" alt="waypoints"/>
+
+                                    <h3>Implementation</h3>
+                                    <br>
+                                    <p class="text-start">The series of actions, both orientation PID and timed forward motions, are implemented as a callable function in Arduino. <br>
+                                        Implementation shown below: <br>
+                                    </p>
+                                    <script src="https://gist.github.com/heisen-kong/dd44bbc938948ce4ae5b88b6a406a01f.js"></script>
+                                    <br>
+                                    <p class="text-start">
+                                        It could be seen that the angle arguments passed into orientation PID control sometimes do not match the angle previously planned. This is due to the fact that the robot does not always turn to the exact angle as planned and is compensated by passing through angle values over/under the desired value. <br>
+                                        In order to ensue the robot stops immediately at waypoint instead of coasting, I changed the <strong>stop()</strong> function to pass <strong>slow decay/Brake</strong> arguments to the h-bridge, which are 255 into both pins. <br>
+                                    </p>
+                                    <br>
+                                    <h3>Results</h3>
+                                    <br>
+                                    <p class="text-start">
+                                        The robot was able to successfully navigate through the set of waypoints and go to the endpoint! <br>
+                                        The video below shows the robot executing the path planning task:<br><br>
+                                    </p>
+                                    <div class="ratio ratio-16x9">
+                                        <iframe src="https://www.youtube.com/embed/apBdZmXMn7M?mute=1" title="MAE4190 LAB12: path execution" allowfullscreen></iframe>
+                                    </div>
                                     <br><br>
 
-                                    <h4 class="text-start">perform_observation_loop in Python</h4>
-                                    <p class="text-start">
-                                        The perform_observation_loop function calls the localization function on the Arduino, waits for the data to be sent back and rescales the data to be used for localization. <br>
-                                        Implementation of function is shown below:<br>
-                                    </p>
-                                    <script src="https://gist.github.com/heisen-kong/1753f97ef25d72a33eebc0270701aee4.js"></script>
-                                    <br><br>
-
-                                    <h4 class="text-start">Challenges</h4>
-                                    <p class="text-start">
-                                    While I believe the implementation is correct, I was unable to get the robot to perform the localization task. <br>
-                                    This was due to a discrepancy between the set of data that is taken on the Arduino and the data that was sent and received on the Python code. <br>
-                                    As shown below, the data collected in Arduino exists in relatviely robust 20 degree angle increments (in the <strong>CA</strong> current angle column) with its corresponding distance readings. <br>
-                                    However, the data received on Python skips data at certain angles at first, then proceed to maintain the same exact readings for the following data points. <br>
-                                    This makes it impossible to perform the localization task as the data is not reliable. <br>
-                                    </p>
-                                    <p class="text-start">Readings taken from Arduino Serial screen, to be sent to Python code:</p>
-                                    <img class="img-fluid mb-5" src="assets/lab11/arduino_readings.png" alt="arduino"/>
-                                    <p class="text-start">Readings received from Arduino, shown on Python:</p>
-                                    <img class="img-fluid mb-5" src="assets/lab11/python_readings.png" alt="python"/>
                                     
-                                    <p class="text-start">
-                                        I tried multiple methods to fix this issue, including sending data in varying size, implementing varying delay times etc. However, none of it seemed to fix the problem.<br>
-                                        Very unfortunate that I was unable to fix this issue and get the localization task to work. Perhaps I may be able to figure a workaround if given more time.<br>
-                                        I will be sure to update this section if I am able to fix the issue in the future. <br>
-                                    </p>
-                                    <br><br>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
