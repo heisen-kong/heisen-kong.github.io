@@ -88,14 +88,14 @@
       <div class="col-lg-4">
         <div class="mb-4">
 		  <h2 class="mb-5">Exploring Human & Robot Co-design Methods</h2>
-          <p><span class="text-color-hover-light">Human-Robot Interaction</span> • <span class="text-color-hover-light">Robotics</span> • <span class="text-color-hover-light">Research</span></p> 
+          <p><span class="text-color-hover-light">Human-Robot Interaction</span> • <span class="text-color-hover-light">Robotics</span> • <span class="text-color-hover-light">Computer Vision</span></p> 
 		</div>
 	</div>
       <div class="col-lg-8">
         <div class="mb-4">
           <h3 class="text-color mb-4">Collaborative Design Platform for Humans and Robots</h3>
-          <p class="lead">Developed a collaborative design platform where humans and robots co-create layouts together, exploring new interaction paradigms in creative work.</p>
-          <p class="mt-3">The goal was to investigate how gesture-based interfaces and robotic manipulation can enable seamless collaboration between humans and robots in design tasks, creating a more intuitive and productive co-creation experience.</p>
+          <p class="lead">This project is a first building block toward a larger human–robot co-creation workflow: a person sketches a layout directly on a shared table, and a Kinova Gen3 robot arm collaborates by placing 3D-printed fence segments along that outline.</p>
+          <p class="mt-3">The interaction is intentionally lightweight: the system records the user’s index-finger path only when the index finger is the only finger extended, and the user ends the trace with an “OK-sign.” From that captured point cloud, the pipeline reconstructs a clean polygonal outline and generates evenly spaced fence poses the robot can execute.</p>
         </div>
       </div>
     </div>
@@ -107,9 +107,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<video controls autoplay muted loop style="width: 100%; height: auto; display: block; border-radius: 8px;" poster="images/portfolio/CLAMP.png">
+				<video controls autoplay muted loop style="width: 100%; height: auto; display: block; border-radius: 8px;" poster="images/portfolio/HRC/hrc2_cover_wide.png">
 					<source src="images/portfolio/HRC_Codesign.mp4" type="video/mp4">
-					<img src="images/portfolio/CLAMP.png" alt="Human-Robot Co-design" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+					<img src="images/portfolio/HRC/hrc2_cover_wide.png" alt="Human-Robot Co-design" style="width: 100%; height: auto; display: block; border-radius: 8px;">
 				</video>
 			</div>
 		</div>
@@ -124,7 +124,7 @@
         <h4 class="text-color-hover-light mb-2">Research Approach</h4>
         <h2 class="mb-4">A Novel Interface for Co-creation</h2>
         <p>Working with the hrc² lab at Cornell, we developed an interactive platform that enables humans to communicate design intent through natural hand gestures, which the robot interprets and executes through precise manipulation.</p>
-        <p class="mt-3">The system combines computer vision, gesture recognition, and robotic control to create a seamless feedback loop where both human and robot contribute their unique strengths to the creative process.</p>
+        <p class="mt-3">Designing a “language” of collaboration to feel like natural human communication rather than a robot UI. The system combines computer vision, gesture recognition, and robotic control to create a seamless feedback loop where both human and robot contribute their unique strengths to the creative process.</p>
       </div>
     </div>
   </div>
@@ -136,22 +136,48 @@
     <div class="row mb-5">
       <div class="col-lg-8 offset-lg-2">
         <h4 class="text-color-hover-light mb-2">Technical Implementation</h4>
-        <h2 class="mb-4">Gesture Recognition and Robotic Control</h2>
-        <p>Built a gesture recognition system using OpenCV and MediaPipe to detect and interpret hand-drawn shapes in real-time. The system translates these gestures into actionable commands for the robotic arm.</p>
-        <p class="mt-3">Integrated with ROS (Robot Operating System) to enable a Kinova Gen3 robotic arm to execute precise pick-and-place tasks based on the detected gestures. The challenge was achieving low latency and high accuracy to maintain a natural interaction flow.</p>
-      </div>
+        <div>
+			<h2 class="mb-4">Camera and sensing: choosing stability over convenience</h2>
+			<p>A key early decision was how the system should see the workspace.</p>
+			<p><span class="text-color-hover"><strong>Alternatives considered: </strong></span>We considered using Kinova's onboard camera for a cleaner setup. However, the camera's reference frame moves with the end effector, and the arm's positional error can reach ~1 cm—exactly the same scale as the placement tolerance target. It also forces a "home pose" overhead for full-table visibility, slowing the human workflow. </p>
+			<p class="mt-3 mb-5"><span class="text-color-hover"><strong>Final choice:</strong></span> a fixed webcam mounted ~1 m above the table to capture the full workspace continuously, outside the arm's operating volume (stable reference frame, no extra robot motion overhead).</p>
+		</div>
+
+		<div>
+			<h2 class="mb-4">Robust gesture recognition with normalized landmarks</h2>
+			<p>Gesture recognition is powered by hand landmarks (21 keypoints per hand) and simple geometric tests—built for reliability rather than novelty.</p>
+			<p><span class="text-color-hover"><strong>What made it robust: </strong></span>Instead of using absolute distances between fingertips (which breaks across different hand sizes and distances to camera), I normalized measurements by palm scale. This made the gesture classifier invariant to hand size and depth, improving consistency across users. </p>
+			<p class="mt-3 mb-5"><span class="text-color-hover"><strong>Design intent:</strong></span> keep it fast and interpretable—so failures are diagnosable and latency stays below the interaction threshold (targeted under ~200 ms). </p>
+		</div>
+
+		<div>
+			<h2 class="mb-4">From noisy finger paths to fence-ready geometry</h2>
+			<p>The hardest “thinking” part of the system is turning a noisy trace into a clean outline that preserves corners and is constructible with physical fence segments.</p>
+			<p><span class="text-color-hover"><strong>Hard constraint: </strong></span>every edge between consecutive vertices must exceed the 5 cm fence length, otherwise the robot would be asked to place segments that physically can’t fit. </p>
+			<p class="mt-3"><span class="text-color-hover"><strong>Design exploration: </strong></span>I tested each algorithm family across many traces (convex, concave, and “messy” user shapes) and judged them on: vertex fidelity (especially concave corners), constructibility (edge length), and stability. <br></p>
+			<p><span><strong>1. tight α-concave hull (α=0.1): </strong></span> bad vertex interpretation + too many short edges (not fence-constructible).<br>
+				<img src="images/portfolio/HRC/fig1.png" alt="Human-Robot Co-design" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+			</p>
+			<p><span><strong>2. loose α-concave hull (α=0.5): </strong></span> better on convex corners but still collapses concave features; still produces short edges without extra processing.<br>
+				<img src="images/portfolio/HRC/fig2.png" alt="Human-Robot Co-design" style="width: 100%; height: auto; display: block; border-radius: 8px;"> 
+			</p>
+			<p><span><strong>3. Convex hull + distance smoothing: </strong></span> constructible edges, but convex hull fundamentally cannot represent concavity; also missed important convex vertices in some traces.<br>
+				<img src="images/portfolio/HRC/fig3.png" alt="Human-Robot Co-design" style="width: 100%; height: auto; display: block; border-radius: 8px;"> 
+			</p>
+			<p class="mb-5"><span><strong>4. Ramer–Douglas–Peucker (RDP) + distance smoothing (final): </strong></span> handled both concave and convex shapes, preserved key vertices, and could be recursively tuned until edges satisfied the 5 cm constraint.<br>
+				<img src="images/portfolio/HRC/fig4.png" alt="Human-Robot Co-design" style="width: 100%; height: auto; display: block; border-radius: 8px;"> 
+			</p>
+		</div>
+
+		<div>
+			<h2 class="mb-4">Aligning vision space to robot space</h2>
+			<p>The full system only works if the CV output becomes a valid robot input.</p>
+			<p class="mt-3">I integrated the modules by converting the camera-derived trace coordinates into the robot’s reference frame using transformation matrices and scaling, so the planned fence poses match the Kinova control interface. </p>
+			
+		</div>
+		</div>	
     </div>
     
-    <!-- Additional image placeholder -->
-    <div class="row mt-5">
-      <div class="col-lg-10 offset-lg-1">
-        <div class="bg-extra" style="height: 400px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-          <p class="text-color-hover-light">System Architecture Diagram</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- Research Findings Section -->
 <section class="section pt-5 pb-5 bg-secondary">
@@ -172,10 +198,15 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
-        <h4 class="text-color-hover-light mb-2">Impact</h4>
-        <h2 class="mb-4">Advancing Human-Robot Interaction</h2>
+        <h4 class="text-color-hover-light mb-2">Impact & Future Work</h4>
+        <h2 class="mb-4">Extending from “execute my sketch” to real co-creation</h2>
         <p>This research contributes to the growing field of human-robot collaboration by demonstrating practical methods for co-design. The findings have implications for future interactive systems where humans and robots work together as creative partners.</p>
-        
+        <p class="mt-3">Next steps include:</p>
+		<p><span class="text-color-hover"><strong>User Studies </strong></span>with designers/planners to refine gestures, feedback, and failure recovery. </p>
+		<p><span class="text-color-hover"><strong>Object Recognition </strong></span>on the table so the robot can reason about existing elements, not just place along a new outline. </p>
+		<p><span class="text-color-hover"><strong>Design suggestion features </strong></span>to compute-and-suggest alternatives (spacing, accessibility, circulation) while keeping the human in control. </p>
+		
+			
         <div class="mt-5 p-4" style="border-left: 4px solid #47ffc5; background: #f7f7f7;">
           <p class="mb-0" style="font-style: italic;">"This work explores an exciting new paradigm where robots become active collaborators in the creative process, not just tools."</p>
           <p class="mt-2 mb-0 text-sm"><span class="text-color-hover">hrc² Lab, Cornell University</span></p>

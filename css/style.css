@@ -169,6 +169,15 @@ a:hover {
   color: #47ffc5;
 }
 
+.text-color-hover-inverted{
+  color: #47ffc5;
+  transition: all 0.1s ease-in-out;
+}
+.text-color-hover-inverted:hover {
+  color: #000;
+}
+
+
 
 .link-color {
   color: #000;
